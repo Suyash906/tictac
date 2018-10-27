@@ -20,6 +20,16 @@
  */
 const grid = [];
 const GRID_LENGTH = 3;
+const WINNING_COMBINATIONS =[
+  [[0,0], [0,1], [0,2]],
+  [[1,0], [1,1], [1,2]],
+  [[2,0], [2,1], [2,2]],
+  [[0,0], [1,1], [2,2]],
+  [[2,0], [1,1], [0,2]],
+  [[0,2], [1,2], [2,2]],
+  [[0,1], [1,1], [2,1]],
+  [[0,0], [1,0], [2,0]]
+];
 let turn = 'X';
 
 function initializeGrid() {
@@ -78,6 +88,10 @@ function onBoxClick() {
     grid[colIdx][rowIdx] = newValue;
     renderMainGrid();
     addClickHandlers();
+    if(checkWin(grid)){
+        alert("Hooraay You Won!!!!!");
+        removeClickHandlers();
+    }
 }
 
 function addClickHandlers() {
@@ -85,6 +99,30 @@ function addClickHandlers() {
     for (var idx = 0; idx < boxes.length; idx++) {
         boxes[idx].addEventListener('click', onBoxClick, false);
     }
+}
+
+function removeClickHandlers() {
+    var boxes = document.getElementsByClassName("box");
+    for (var idx = 0; idx < boxes.length; idx++) {
+        boxes[idx].removeEventListener('click', onBoxClick, false);
+    }
+}
+
+function checkWin(grid) {
+    for(var i = 0; i<WINNING_COMBINATIONS.length; i++) {
+        var win = 1;
+        for(var j=0 ; j<WINNING_COMBINATIONS[i].length;j++ ) {
+            if(0 === grid[WINNING_COMBINATIONS[i][j][0]][WINNING_COMBINATIONS[i][j][1]]){
+                win = 0;
+                break;
+            }
+
+        }
+        if(1 === win){
+            break;
+        }
+    }
+    return win;
 }
 
 initializeGrid();
